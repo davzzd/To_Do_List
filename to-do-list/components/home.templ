@@ -1,0 +1,42 @@
+package components
+
+type Todo struct {
+	Text string
+}
+
+templ Home(todos []Todo) {
+    <html>
+        <head>
+            <title>To-Do List</title>
+            <link rel="stylesheet" href="/static/styles.css" />
+        </head>
+        <body>
+            <div class="container">
+                <h1>My To-Do List</h1>
+
+                <form action="/add" method="POST" class="todo-form">
+                    <input type="text" name="item" placeholder="Enter a task..." required />
+                    <button type="submit">Add Task</button>
+                </form>
+
+                <ul class="todo-list">
+                    for _, todo := range todos {
+                        <li class="todo-item">
+                            <div class="todo-content">
+                                <span>{ todo.Text }</span>
+                            </div>
+                            <form action="/delete" method="POST" style="margin: 0;">
+                                <input type="hidden" name="item" value={ todo.Text } />
+                                <button type="submit" class="delete-btn">
+                                    <svg class="delete-icon" viewBox="0 0 24 24">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </body>
+    </html>
+}
