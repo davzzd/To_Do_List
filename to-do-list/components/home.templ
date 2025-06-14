@@ -1,7 +1,8 @@
 package components
 
 type Todo struct {
-	Text string
+	Text      string
+	Completed bool
 }
 
 templ Home(todos []Todo) {
@@ -14,18 +15,27 @@ templ Home(todos []Todo) {
             <div class="container">
                 <h1>My To-Do List</h1>
 
-                <form action="/add" method="POST" class="todo-form">
+                <form action="/api/todos" method="POST" class="todo-form">
                     <input type="text" name="item" placeholder="Enter a task..." required />
                     <button type="submit">Add Task</button>
                 </form>
 
                 <ul class="todo-list">
                     for _, todo := range todos {
-                        <li class="todo-item">
+                        <li class="todo-item" class:completed={ todo.Completed }>
                             <div class="todo-content">
+                                <form action={ "/api/todos/" + todo.Text + "/toggle" } method="POST" style="margin: 0; display: inline;">
+                                    <input type="hidden" name="item" value={ todo.Text } />
+                                    if todo.Completed {
+                                        <input type="checkbox" name="completed" checked onclick="this.form.submit()" />
+                                    } else {
+                                        <input type="checkbox" name="completed" onclick="this.form.submit()" />
+                                    }
+                                </form>
                                 <span>{ todo.Text }</span>
                             </div>
-                            <form action="/delete" method="POST" style="margin: 0;">
+                            <form action={ "/api/todos/" + todo.Text } method="POST" style="margin: 0;">
+                                <input type="hidden" name="_method" value="DELETE" />
                                 <input type="hidden" name="item" value={ todo.Text } />
                                 <button type="submit" class="delete-btn">
                                     <svg class="delete-icon" viewBox="0 0 24 24">
